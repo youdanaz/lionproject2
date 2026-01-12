@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TutorialStatusUpdateRequest {
+public class PutTutorialStatusUpdateRequest {
     private TutorialStatus tutorialStatus;
 }

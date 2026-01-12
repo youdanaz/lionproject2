@@ -1,13 +1,15 @@
 package com.example.lionproject2backend.tutorial.controller;
 
 import com.example.lionproject2backend.global.response.ApiResponse;
-import com.example.lionproject2backend.tutorial.dto.TutorialCreateRequest;
-import com.example.lionproject2backend.tutorial.dto.TutorialResponse;
-import com.example.lionproject2backend.tutorial.dto.TutorialStatusUpdateRequest;
-import com.example.lionproject2backend.tutorial.dto.TutorialUpdateRequest;
+import com.example.lionproject2backend.tutorial.dto.PostTutorialCreateRequest;
+import com.example.lionproject2backend.tutorial.dto.GetTutorialResponse;
+import com.example.lionproject2backend.tutorial.dto.PutTutorialStatusUpdateRequest;
+import com.example.lionproject2backend.tutorial.dto.PutTutorialUpdateRequest;
 import com.example.lionproject2backend.tutorial.service.TutorialService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,53 +22,69 @@ public class TutorialController {
     private final TutorialService tutorialService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<TutorialResponse>> createTutorial(
-            @RequestBody TutorialCreateRequest request
+    public ResponseEntity<ApiResponse<GetTutorialResponse>> createTutorial(
+            @AuthenticationPrincipal Long userId,
+            @Valid @RequestBody PostTutorialCreateRequest request
     ) {
-        TutorialResponse response = tutorialService.createTutorial(request);
+        System.out.println("🔥 userId = " + userId);
+        GetTutorialResponse response = tutorialService.createTutorial(userId, request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TutorialResponse>>> getAllTutorials() {
-        List<TutorialResponse> tutorials = tutorialService.getAllTutorials();
+    public ResponseEntity<ApiResponse<List<GetTutorialResponse>>> getAllTutorials() {
+        List<GetTutorialResponse> tutorials = tutorialService.getAllTutorials();
         return ResponseEntity.ok(ApiResponse.success(tutorials));
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<TutorialResponse>> getTutorial(
-            @PathVariable("id") Long tutorialId
+    @GetMapping("/{tutorialId}")
+    public ResponseEntity<ApiResponse<GetTutorialResponse>> getTutorial(
+            @PathVariable Long tutorialId
     ) {
-        TutorialResponse response = tutorialService.getTutorial(tutorialId);
+        GetTutorialResponse response = tutorialService.getTutorial(tutorialId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<TutorialResponse>> updateTutorial(
-            @PathVariable("id") Long tutorialId,
-            @RequestBody TutorialUpdateRequest request
+    @PutMapping("/{tutorialId}")
+    public ResponseEntity<ApiResponse<GetTutorialResponse>> updateTutorial(
+            @PathVariable Long tutorialId,
+            @AuthenticationPrincipal Long userId,
+            @Valid @RequestBody PutTutorialUpdateRequest request
     ) {
-        TutorialResponse response = tutorialService.updateTutorial(tutorialId, request);
+        GetTutorialResponse response = tutorialService.updateTutorial(userId, tutorialId, request);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{tutorialId}")
     public ResponseEntity<ApiResponse<Long>> deleteTutorial(
-            @PathVariable("id") Long tutorialId
+            @PathVariable Long tutorialId,
+            @AuthenticationPrincipal Long userId
     ) {
-        Long deletedId = tutorialService.deleteTutorial(tutorialId);
+        Long deletedId = tutorialService.deleteTutorial(userId, tutorialId);
         return ResponseEntity.ok(ApiResponse.success(deletedId));
     }
 
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<TutorialResponse>> updateStatus(
-            @PathVariable Long id,
-            @RequestBody TutorialStatusUpdateRequest request
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<GetTutorialResponse>>> searchTutorials(
+            @RequestParam String keyword
     ) {
-        TutorialResponse response = tutorialService.updateTutorialStatus(id, request);
+        List<GetTutorialResponse> response =
+                tutorialService.searchTutorials(keyword);
+
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @PutMapping("/{tutorialId}/status")
+    public ResponseEntity<ApiResponse<GetTutorialResponse>> updateStatus(
+            @PathVariable Long tutorialId,
+            @AuthenticationPrincipal Long userId,
+            @Valid @RequestBody PutTutorialStatusUpdateRequest request
+    ) {
+        GetTutorialResponse response = tutorialService.updateTutorialStatus(userId, tutorialId, request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }

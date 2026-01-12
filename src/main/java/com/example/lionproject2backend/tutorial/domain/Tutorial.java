@@ -6,19 +6,16 @@ import com.example.lionproject2backend.skill.domain.Skill;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tutorials")
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tutorial extends BaseEntity{
 
@@ -52,7 +49,7 @@ public class Tutorial extends BaseEntity{
     @OneToMany(mappedBy = "tutorial", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TutorialSkill> tutorialSkills = new ArrayList<>();
 
-    /*create*/
+
     public static Tutorial create(
             Mentor mentor,
             String title,
@@ -69,6 +66,18 @@ public class Tutorial extends BaseEntity{
         tutorial.rating = BigDecimal.ZERO;
         tutorial.tutorialStatus = TutorialStatus.ACTIVE;
         return tutorial;
+    }
+
+    public void update(
+            String title,
+            String description,
+            int price,
+            int duration
+    ) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.duration = duration;
     }
 
     public void addSkill(Skill skill) {
@@ -89,6 +98,10 @@ public class Tutorial extends BaseEntity{
 
     public void addSkills(List<Skill> skills) {
         skills.forEach(this::addSkill);
+    }
+
+    public void changeStatus(TutorialStatus newStatus) {
+        this.tutorialStatus = newStatus;
     }
 
 }

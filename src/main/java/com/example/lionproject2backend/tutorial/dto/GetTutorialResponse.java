@@ -1,5 +1,4 @@
 package com.example.lionproject2backend.tutorial.dto;
-import com.example.lionproject2backend.skill.domain.Skill;
 import com.example.lionproject2backend.tutorial.domain.Tutorial;
 import com.example.lionproject2backend.tutorial.domain.TutorialStatus;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 @Getter
 @AllArgsConstructor
-public class TutorialResponse {
+public class GetTutorialResponse {
 
     private Long id;
     private String title;
@@ -23,8 +22,8 @@ public class TutorialResponse {
 
     private List<String> skills;
 
-    public static TutorialResponse from(Tutorial tutorial) {
-        return new TutorialResponse(
+    public static GetTutorialResponse from(Tutorial tutorial) {
+        return new GetTutorialResponse(
                 tutorial.getId(),
                 tutorial.getTitle(),
                 tutorial.getDescription(),
