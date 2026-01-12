@@ -21,17 +21,17 @@
         try {
             // 2. 포트원 결제창 호출
             const response = await PortOne.requestPayment({
-                storeId: "store-9f2484a4-da8a-46d7-a826-63e218708e5a", 
-                channelKey: "channel-key-2eb6d695-708b-4f2e-aeb2-2dfa70ed3866",
+                storeId: "store", 
+                channelKey: "channel-key",
                 paymentId: orderPaymentId,
                 orderName: "과외 테스트 상품",
                 totalAmount: orderAmount,
                 currency: "CURRENCY_KRW",
                 payMethod: "CARD",
                 customer: {
-                    fullName: "김도은", // 실제 서비스에선 로그인된 유저명 연결
-                    phoneNumber: "010-9907-8600",
-                    email: "doeun457@gmail.com",
+                    fullName: "user", // 실제 서비스에선 로그인된 유저명 연결
+                    phoneNumber: "010-****-****",
+                    email: "****@gmail.com",
                 },
                 windowType: {
                     pc: "IFRAME"
@@ -63,7 +63,7 @@
                 // window.location.href = "/orders/success"; 
             } else {
                 const errorText = await verifyRes.text();
-                alert("❌ 서버 검증 실패: " + errorText);
+                alert("서버 검증 실패: " + errorText);
             }
 
         } catch (error) {
