@@ -37,8 +37,8 @@ public class Ticket extends BaseEntity {
     @Column(name = "total_count", nullable = false)
     private int totalCount;
 
-    @Enumerated(EnumType.STRING)
-    private TicketStatus stauts;
+//    @Enumerated(EnumType.STRING)
+//    private TicketStatus stauts;
 
     @Column(name = "remaining_count", nullable = false)
     private int remainingCount;
